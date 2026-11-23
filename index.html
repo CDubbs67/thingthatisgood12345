@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Interlock 3D - Shape Disassembly Puzzles</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+  <div id="game-container">
+    <canvas id="three-canvas"></canvas>
+
+    <!-- Header HUD -->
+    <header class="hud-header">
+      <div class="logo-area">
+        <div class="logo-icon">🧩</div>
+        <div class="logo-text">
+          <h1>INTERLOCK 3D</h1>
+          <span class="subtitle">Geometric Puzzles</span>
+        </div>
+      </div>
+
+      <!-- Shape Selector Controls -->
+      <div class="shape-selector-wrap">
+        <label for="shape-select">Shape:</label>
+        <select id="shape-select">
+          <option value="square">🟩 Square (Cube)</option>
+          <option value="triangle">🔺 Triangle (Pyramid)</option>
+          <option value="rectangle">🟦 Rectangle (Prism)</option>
+          <option value="circle">⚪ Circle (Sphere)</option>
+        </select>
+        <button id="btn-randomize" class="shape-reroll-btn" title="Generate New Layout for this Shape">
+          🎲 New Puzzle
+        </button>
+      </div>
+
+      <div class="stats-area">
+        <div class="stat-badge">
+          <span class="stat-label">PIECES</span>
+          <span class="stat-value" id="pieces-count">0 / 0</span>
+        </div>
+        <div class="stat-badge">
+          <span class="stat-label">MOVES</span>
+          <span class="stat-value" id="moves-count">0</span>
+        </div>
+        <div class="stat-badge">
+          <span class="stat-label">TIME</span>
+          <span class="stat-value" id="timer-display">00:00</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Action Toolbar (Bottom Floating) -->
+    <div class="action-toolbar">
+      <button id="btn-hint" class="tool-btn" title="Highlight a piece that can slide">
+        <span class="icon">💡</span>
+        <span class="label">Hint</span>
+      </button>
+      <button id="btn-reset" class="tool-btn" title="Reset puzzle to assembled state">
+        <span class="icon">🔄</span>
+        <span class="label">Reset</span>
+      </button>
+      <button id="btn-sound" class="tool-btn" title="Toggle Sound">
+        <span class="icon" id="sound-icon">🔊</span>
+        <span class="label">Audio</span>
+      </button>
+      <button id="btn-theme" class="tool-btn" title="Switch Material Theme">
+        <span class="icon">🎨</span>
+        <span class="label">Material</span>
+      </button>
+      <button id="btn-help" class="tool-btn" title="Controls and How to Play">
+        <span class="icon">❓</span>
+        <span class="label">Help</span>
+      </button>
+    </div>
+
+    <!-- Onscreen Controls Overlay Tips -->
+    <div class="controls-pill" id="controls-hint">
+      <span>🖱️ <b>Rotate:</b> Drag empty space &nbsp;|&nbsp; ✋ <b>Slide:</b> Click & drag a piece &nbsp;|&nbsp; 🔍 <b>Zoom:</b> Scroll</span>
+    </div>
+
+    <!-- Help Modal Dialog -->
+    <div class="modal-backdrop" id="help-modal">
+      <div class="modal-card">
+        <h2>How to Play Interlock 3D</h2>
+        <div class="modal-body">
+          <div class="guide-item">
+            <span class="guide-icon">📐</span>
+            <div>
+              <h3>1. Geometric Shapes</h3>
+              <p>Every puzzle forms an exact 3D shape (<b>Square Cube</b>, <b>Triangle Pyramid</b>, <b>Rectangle Prism</b>, or <b>Circle Sphere</b>) partitioned into interlocking blocks with zero overlap.</p>
+            </div>
+          </div>
+          <div class="guide-item">
+            <span class="guide-icon">🔄</span>
+            <div>
+              <h3>2. Rotate & Inspect</h3>
+              <p>Click & drag anywhere on the background (or right-click) to spin 360°. Inspect seams, open slide paths, and key locking tabs from every perspective.</p>
+            </div>
+          </div>
+          <div class="guide-item">
+            <span class="guide-icon">✋</span>
+            <div>
+              <h3>3. Slide Apart</h3>
+              <p>Click & drag a piece along its open axis. Pull it free from the shape core to dismantle the puzzle one piece at a time!</p>
+            </div>
+          </div>
+        </div>
+        <button class="btn-primary" id="btn-close-help">Got it, Let's Play!</button>
+      </div>
+    </div>
+
+    <!-- Victory Modal -->
+    <div class="modal-backdrop" id="victory-modal">
+      <div class="modal-card victory-card">
+        <div class="victory-trophy">🏆</div>
+        <h2 id="vic-header">PUZZLE SOLVED!</h2>
+        <p class="victory-subtitle" id="vic-subtitle">All interlocking pieces disassembled without collision.</p>
+        
+        <div class="victory-stats">
+          <div class="v-stat">
+            <span class="v-label">Final Time</span>
+            <span class="v-val" id="vic-time">00:42</span>
+          </div>
+          <div class="v-stat">
+            <span class="v-label">Total Moves</span>
+            <span class="v-val" id="vic-moves">14</span>
+          </div>
+        </div>
+
+        <div class="victory-actions">
+          <button class="btn-secondary" id="btn-replay">Replay Layout</button>
+          <button class="btn-primary" id="btn-next-shape">Next Shape →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="audio.js"></script>
+  <script src="puzzles.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
